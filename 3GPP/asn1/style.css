@@ -1,0 +1,166 @@
+body {
+    font-family: Calibri;
+    margin-top: 0px;    
+    margin-bottom: 600px;
+}
+
+a:visited {
+    color: blue;
+}
+
+/**********************************************************/
+/* top */
+/**********************************************************/
+#top {
+    position: sticky;
+    top: 0px;
+    background-color: RGB(230,230,230);
+}
+
+#top span {
+    padding-right: 5px;
+    margin-right: 5px;
+    border-right: 2px solid white;
+    font-weight: bold;
+}
+
+/**********************************************************/
+/* table general */
+/**********************************************************/
+table {
+    border-collapse: collapse;
+    border: 1px solid grey;
+    background-color: FloralWhite;    
+}
+
+tr:hover {
+    background-color: rgb(205, 230, 245);
+}
+
+td {
+    padding: 3px 5px 3px 5px;
+}
+
+/**********************************************************/
+/* CH5 content table */
+/**********************************************************/
+table.ch5content {
+    max-width: 65%;
+    /* margin: 0 auto; */
+}
+
+table.ch5content td {
+    vertical-align: top;
+}
+
+table.ch5content td.flag {
+    vertical-align: middle;
+}
+
+/**********************************************************/
+/* TOC table level col */
+/**********************************************************/
+table.toctable td:nth-child(2) {
+    display: none;
+}
+
+/**********************************************************/
+/* ASN1 Tree table */
+/**********************************************************/
+table.asn1tree td {
+    padding: 0px 2px 0px 2px;
+    /* white-space: pre; */
+    font-size: small;
+}
+
+tr[clickable='+']:hover {
+    cursor: pointer;
+}
+
+tr[clickable='-']:hover {
+    cursor: pointer;
+}
+
+/* tree */
+table.asn1tree[tview=tree] td {
+    white-space: pre;
+}
+
+table.asn1tree[tview=tree] .desc {
+    display: none;
+}
+
+table.asn1tree[tview=tree] td.vrange {
+    overflow: hidden;
+    text-overflow: ' <Cut>';
+    white-space: nowrap;
+}
+
+table.asn1tree[tview=tree] td[desc=hasdesc] {
+    color: blue;
+}
+
+/* table view */
+table.asn1tree[tview=table] td {
+    white-space: normal;
+    border: 1px solid black;
+    padding: 5px 5px 5px 5px;
+}
+
+table.asn1tree[tview=table] td.desc {
+    display: '';
+}
+
+/* common */
+.flag {
+    font-family: Courier;
+    color: red;
+    /* font-weight: bold; */
+    vertical-align: middle;
+}
+
+.iepad {
+    font-family: Consolas;
+    white-space: pre;
+    color: black;
+}
+
+table.asn1tree[tview=table] .iepad {
+    font-family: Calibri;
+}
+
+.ie {
+    white-space: pre;
+}
+
+table.asn1tree .ie[desc=hasdesc] {
+    color: blue;
+}
+
+table.asn1tree .ie[desc=hasch5] {
+    color: purple;
+}
+
+table.asn1tree[hiddeniepad] .iepad {
+    display: none;
+}
+
+/************************************************************/
+/* popup div */
+/************************************************************/
+#fd {
+    font-family: 'Segoe UI';
+    font-size: small;
+    position: absolute;    
+    background-color: white;  
+    color: rgb(100, 100, 100);
+    max-width: 60%;
+    border: solid 1px;  
+    padding: 5px 5px 5px 5px;  
+    white-space: pre-wrap;
+}
+
+#fd:hover {
+    background-color: lightyellow;
+    background-color: rgb(221, 255, 221)
+}

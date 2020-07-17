@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>24008 24301 24501 NAS Message HTML View</title>
+        <script src='app/brython.js'></script>
+    </head>
+    <body onload="brython(1)">
+
+    <div id='output'>
+        <b id='title'>This pages must open with Firefox</b>
+    </div>
+
+    <script type='text/python'>
+from browser import document
+from browser.html import UL, LI, A
+document['output'].clear()
+ul = UL()
+document['output'] <= ul
+for ts in [24008, 24301, 24501]:
+    ul <= LI(A(ts, href='app/{}.html'.format(ts)))
+    </script>
+    
+    </body>
+</html>

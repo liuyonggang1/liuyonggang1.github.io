@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>LTE/NR ASN1 Treeview</title>
+        
+        <script src='data24008.js'></script>
+        <script src='data24301.js'></script>
+        <script src='data24501.js'></script>
+        <script src='data36331.js'></script>
+        <script src='data36331ch5.js'></script>
+        <script src='data36413.js'></script>
+        <script src='data36423.js'></script>
+        <script src='data36443.js'></script>
+        <script src='data36444.js'></script>
+        <script src='data36455.js'></script>
+        
+        <script src='data38331.js'></script>
+        <script src='data38331ch5.js'></script>
+        <script src='data38413.js'></script>
+        <script src='data38423.js'></script>
+        <script src='data38455.js'></script>
+        <script src='data38463.js'></script>
+        <script src='data38473.js'></script>
+        <script src='brython.js'></script>
+        <script src='xlsx.js'></script>
+        <style>
+/* top, right, bottom, left */
+
+body {
+    font-family: Calibri; 
+    font-size: 0.85em;
+    background-color: FloralWhite;    
+    margin:  0px 0px 0px 0px;
+    padding: 0px 10px 600px 20px;
+}
+
+table {
+    border-collapse: collapse;
+    border: 1px solid grey;
+}
+
+tr:hover {
+    background-color: lightblue;
+}
+
+td {
+    margin:  0px 0px 0px 0px;
+    padding: 0px 0px 0px 5px;
+    border-width: 0px;
+    border-style: none;
+    white-space: pre;
+}
+
+a {
+  text-decoration: none;
+  color: blue;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+#stick {
+    position: sticky;
+    top: 0;
+    background-color: RGB(240,240,240);
+    border-bottom: 1px solid grey;
+    width: 75%;
+    margin-bottom: 10px;
+}
+
+#container_topchar a {
+    padding: 0px 5px 0px 5px;  
+}
+
+#container_history {
+    position: fixed;
+    top: 0px;
+    left: 75%;
+    width:24%;
+    background-color: RGB(240,240,240);
+    max-height: 95%;
+    overflow: auto;
+    margin-bottom: 5px;        
+}
+
+#container_pin table {
+    width: 100%;
+}
+
+#container_pin td {
+    white-space: normal;
+}
+
+.close {
+    padding-right: 5px;
+    padding-left: 5px;
+    cursor: pointer;
+}
+
+.flag {
+    font-family: "Courier New";
+    color: red;
+}
+
+.treepad {
+    font-family: Consolas;
+}
+
+.value {
+    max-width: 50ch;
+    /* max-width: 50%; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+*[hasflag] {
+    cursor: pointer;
+}
+
+/* .ie[hasflag] { */
+    /* cursor: pointer; */
+/* } */
+
+*[desc] {
+    color: blue;
+    /* color: rgb(18, 65, 145); */
+    color: rgb(7, 117, 204);
+    /* color: rgb(42, 92, 152); */
+}
+
+/* .ie[desc] { */
+    /* color: blue; */
+/* } */
+
+
+/************************************************************/
+/* popup div */
+/************************************************************/
+#fd {
+    position: absolute;    
+    background-color: lightyellow;  
+    max-width: 50%;
+    border: solid 1px;  
+    padding: 5px 5px 5px 5px;  
+    white-space: pre-wrap;
+}
+
+#fd:hover {
+    background-color: rgb(221, 255, 221)
+}
+
+/************************************************************/
+/* nas */
+/************************************************************/
+.nas_definition {
+    white-space: pre-wrap;
+}
+
+#nas_msgtable {
+    width: auto;
+    max-width: 80%;
+    border: solid 1px;
+    border-width: 0 1px 1px 0;
+    border-spacing: 0;
+    border-color: black;
+}
+
+#nas_msgtable td  {
+    border: solid 1px;
+    border-width: 1px 0 0 1px;
+    border-color: black; 
+    padding: 2px 5px 2px 5px;
+    white-space: pre;
+}
+
+#nas_msgtable tr:first-child td  {
+    background-color: yellow;
+}
+
+/************************************************************/
+/* ch5 */
+/************************************************************/
+.toctable td {
+    padding: 0px 10px 0px 10px; 
+}
+
+.toctable td:nth-child(2) {
+    display: none;
+}
+
+.ch5content {
+    max-width: 65%;
+}
+
+.ch5content td {
+    vertical-align: top;
+    white-space: pre-wrap;
+    padding: 2px 5px 2px 5px;     
+}
+
+.ch5content td.flag {
+    vertical-align: middle;
+}
+
+#container_topchar2 a {
+    padding: 0px 20px 0px 0px;
+}
+
+</style>
+    </head>
+    <body onload="brython(1)">
+        <div id='stick'>
+            <button id="btn_pin", title="Save to Pin">Pin</button>
+            <button id="btn_copytree" title="for RRC/Core message">copy tree</button>
+            <button id="btn_export_xlsm" title="for RRC/Core message">export xlsm</button>
+            <button id="btn_expand_all" title="for RRC message">expand all</button>            
+            <button id="btn_popup" style="background-color:lightgreen;">Popup On</button>
+            <span id='container_spec_select'></span>
+            <span id='container_release'></span>
+            <span id='container_topchar'></span>
+            <div id='container_topchar2'></div>
+            <div id='container_level'></div>
+        </div>
+        <div id='container_history'>
+            <button id="btn_history">Toggle Pin</button>
+            <div id='container_pin'></div>
+        </div>
+        <div id='container_output'>The page work in firefox and chrome</div>
+        <div id='fd' title="copy by click" style="display:none"></div>
+    </body>
+    <script type="text/python">
+from browser import document, window
+from browser.html import *
+
+try:
+    window.specdata["36331ch5"] = window.ch5data["36331ch5"]
+    window.specdata["38331ch5"] = window.ch5data["38331ch5"]
+    print("allinone")
+except:
+    print("seperate js")
+    window.specdata = dict()
+    window.specdata["36331ch5"] = window.specdata_36331ch5
+    window.specdata["38331ch5"] = window.specdata_38331ch5
+    window.specdata["24008"] = window.specdata_24008
+    window.specdata["24301"] = window.specdata_24301
+    window.specdata["24501"] = window.specdata_24501
+    window.specdata["36331"] = window.specdata_36331
+    window.specdata["38331"] = window.specdata_38331
+    window.specdata["36413"] = window.specdata_36413
+    window.specdata["36423"] = window.specdata_36423
+    window.specdata["36443"] = window.specdata_36443
+    window.specdata["36444"] = window.specdata_36444
+    window.specdata["36455"] = window.specdata_36455
+    window.specdata["38413"] = window.specdata_38413
+    window.specdata["38423"] = window.specdata_38423
+    window.specdata["38463"] = window.specdata_38463
+    window.specdata["38473"] = window.specdata_38473
+    window.specdata["36455"] = window.specdata_36455
+
+#############################################################################################
+#                            Common Util                                                    #
+#############################################################################################
+def get_select_value(select):
+    return select.options[select.selectedIndex].value
+
+def set_select_value(select, value):
+    r = [o.value for o in select.options]
+    if value in r:
+        select.selectedIndex = r.index(value)
+
+# def create_select(value_list):
+    # return SELECT([OPTION(i) for i in value_list])
+
+# def create_select(value_list):
+    # try:
+        # return SELECT([OPTION(g_protocol_dict[i], value=i, title=i) for i in value_list])
+    # except:
+        # return create_select(value_list)
+
+rrc_spec_list = ["36331", "38331"]
+core_spec_list = ["36413", "36423", "36443", "36444", "36455", "38413", "38423", "38455", "38463", "38473"]
+nas_spec_list = ["24301", "24501","24008"]
+ch5_spec_list = ["36331ch5", "38331ch5"]
+lte_spec_list = ["36331", "36413", "36423", "36443", "36444", "36455"]
+nr_spec_list = ["38331", "38413", "38423", "38455", "38463", "38473"]
+
+# supported_spec_list = rrc_spec_list + core_spec_list + nas_spec_list + ch5_spec_list
+supported_spec_list = lte_spec_list + nr_spec_list + ch5_spec_list + nas_spec_list 
+
+def create_spec_select():
+    select = SELECT()
+    for label, lst in zip(["NR", "LTE", "CH5", "NAS"], [nr_spec_list, lte_spec_list, ch5_spec_list, nas_spec_list]):
+        og = OPTGROUP(label=label)
+        select <= og
+        for spec in lst:
+            og <= OPTION(g_protocol_dict[spec], value=spec, title=spec)
+            # og <= OPTION(spec, value=spec, title=spec)
+    # select.onfocus = lambda e: e.target.size = 4 + len(support_spec_list)
+    # select.onblur = lambda e: e.target.size = 1
+    # select.onchange = lambda e: e.target.size = 1, e.target.onblur()
+    # onblur='this.size=1;' 
+    # onchange='this.size=1; this.blur();'>
+    return select
+    
+def is_rrc(spec):
+    return spec in rrc_spec_list
+
+def is_core(spec):
+    return spec in core_spec_list
+
+def is_nas(spec):
+    return spec in nas_spec_list
+
+def is_ch5(spec):
+    return spec in ch5_spec_list
+
+g_protocol_dict = {"":"", 
+                   "36331":"LTE RRC", 
+                   "36413":"LTE S1", 
+                   "36423":"LTE X2", 
+                   "36443":"LTE M2", 
+                   "36444":"LTE M3", 
+                   "36455":"LTE PPa", 
+                   "38331":"NR RRC", 
+                   "38413":"NR NG", 
+                   "38423":"NR Xn", 
+                   "38455":"NR PPa", 
+                   "38463":"NR E1", 
+                   "38473":"NR F1", 
+                   "24301":"NAS LTE", 
+                   "24501":"NAS NR",
+                   "24008":"24008",
+                   "36331ch5": "CH5 LTE RRC",
+                   "38331ch5": "CH5 NR RRC"}
+
+g_rel_path = ""
+localStorage_key = "zapp"
+
+#############################################################################################
+#                            Treeview                                                       #
+#############################################################################################
+col_flag = 0
+col_level = 1
+col_ie = 2
+col_need = 3
+col_udf = 4
+col_value = 5
+col_crit = 6
+col_assign = 7
+
+minus = '-'
+plus = '+'
+
+def get_flag(tr):
+    return tr.cells[col_flag].text
+
+def set_flag(tr, flag):
+    tr.cells[col_flag].text = flag
+
+def get_level(tr):
+    try:
+        return int(tr.cells[col_level].text)
+    except:
+        return None
+
+def get_treepad(tr):
+    return tr.cells[col_ie].select("span")[0].text
+
+def get_ie(tr):
+    return tr.cells[col_ie].select("span")[1].text
+
+def get_need(tr):
+    return tr.cells[col_need].text
+
+def get_udf(tr):
+    try:
+        return tr.cells[col_udf].select("a")[0].text
+    except:
+        return ""
+        
+def get_value(tr):
+    return tr.cells[col_value].text
+
+def get_desc(tr):
+    ie_span = tr.cells[col_ie].select("span")[1]
+    return ie_span.desc if hasattr(ie_span, "desc") else ""
+
+def get_crit(tr):
+    return tr.cells[col_crit].text
+
+def get_assign(tr):
+    return tr.cells[col_assign].text
+
+def get_ie3(tr):
+    ie = get_ie(tr)
+    s = get_udf(tr)
+    if ie in ('nonCriticalExtension', 'lateNonCriticalExtension') and s:
+        return s
+    else:
+        return ie
+
+def get_ie_path(ele):
+    if ele.className != "ie":
+        return ""
+    tr = ele.parent.parent
+    ie = get_ie(tr)
+    a = [get_ie3(tr)] 
+    level = get_level(tr)
+    while level:
+        tr = tr.previousElementSibling
+        tmp = get_level(tr)
+        if level == tmp + 1:
+            a.append(get_ie3(tr))
+            level =  tmp
+    result = ' -> '.join(a[::-1])
+    result = f'<b>{ie}</b>: {result}'
+    return result
+
+
+def show(ele):
+    if ele.style.display == 'none':
+        ele.style.display = ''
+    
+def hide(ele):
+    if ele.style.display != 'none':
+        ele.style.display = 'none'
+#############################################################################
+# flag action
+#############################################################################
+def collapse(tr):
+    set_flag(tr, plus)
+    level = get_level(tr)
+    tr = tr.nextElementSibling
+    while tr and get_level(tr) > level:
+        tr.style.display = 'none'
+        tr = tr.nextElementSibling
+    
+def expand(tr):
+    set_flag(tr, minus)
+    level = get_level(tr)
+    tr = tr.nextElementSibling
+    while tr:
+        nlevel = get_level(tr)
+        if nlevel-1 == level:
+            tr.style.display = ''
+            if get_flag(tr) == minus:
+                expand(tr)
+        elif nlevel <= level:
+            break
+        tr = tr.nextElementSibling
+        
+def click_flag(event):
+    t = event.target
+    while True:
+        if t.tagName in ('TABLE', 'A'):
+            return
+        if t.tagName == 'TR':
+            tr = t
+            break
+        else:
+            t = t.parent
+    flag = get_flag(tr)
+    if flag == minus:
+        collapse(tr)
+    else: # flag == plus
+        ntr = tr.nextElementSibling
+        if ntr is not None and get_level(ntr) == get_level(tr) + 1:
+            expand(tr)
+        else:
+            window.g_app.append_child(tr)
+            create_level_div(window.g_app)
+
+def bind_flag(ele):
+    ele.hasflag = ""
+    ele.bind("click", click_flag)
+    p = ele.parentElement
+    while p is not None:
+        if p.tagName != "TR":
+            p = p.parentElement
+        else:
+            flag_td = p.cells[0]
+            flag_td.hasflag = ""
+            flag_td.bind("click", click_flag)
+            return
+
+def format_enumerated(text):
+    if text.startswith('ENUMERATED'):
+        v = text.replace('ENUMERATED', '').strip()[1:-1]
+        i = 0
+        lst = []
+        for s in v.split(','):
+            s = s.strip()
+            if s == "...":
+                lst.append(s)
+            else:
+                lst.append(f"{i}. {s}")
+                i += 1
+        return "\n".join(lst)
+    else:
+        return ""
+
+#############################################################################
+# click level
+#############################################################################
+def create_level_div(app):
+    div = document["container_level"]
+    div.clear()
+    tables = document["container_output"].select("table")
+    if tables == []:
+        return
+    table = tables[0]
+    lst = sorted({get_level(tr) for tr in table.rows if get_level(tr) is not None})
+    if lst == []:
+        return
+    div <= SPAN('Level:')
+    for i in lst:
+        span = SPAN(i)
+        span.style.color = 'blue'
+        span.style.textDecoration = 'underline'
+        span.style.padding = '5px 5px 5px 5px'
+        span.style.cursor = 'pointer'
+        span.style.borderRightStyle = 'none'
+        span.onclick = click_level
+        div <= span
+    if table.className == 'toctable':
+        if is_rrc(app.spec):
+            collapse_to_level(table, lst[0])
+        elif is_core(app.spec):
+            collapse_to_level(table, lst[1])
+        elif is_ch5(app.spec):
+            n = 1 if app.arg.count(".") else 0
+            if n < len(lst):
+                collapse_to_level(table, lst[n])
+    
+def click_level(event):
+    level = int(event.target.html)
+    table = document["container_output"].select("table")[0]
+    collapse_to_level(table, level)
+
+def collapse_to_level(table, level):
+    for tr in table.rows:
+        if get_level(tr) is None:
+            continue
+        l = get_level(tr)
+        if l < level:
+            show(tr)
+            if get_flag(tr) == plus:
+                set_flag(tr, minus)
+        elif l == level:
+            show(tr)
+            if get_flag(tr) == minus:
+                set_flag(tr, plus)            
+        elif l > level:
+            hide(tr)
+            if get_flag(tr) == minus:
+                set_flag(tr, plus)
+
+#############################################################################################
+#                            IESelect                                                       #
+#############################################################################################
+
+class Asn1App:
+    def __init__(self):
+        self.specdata = window.specdata
+        self.arg = ""
+        for tag in document.select("[id]"):
+            setattr(self, tag.id, tag)
+        #
+        spec_list = supported_spec_list
+        # self.spec_select = create_select(spec_list)
+        self.spec_select = create_spec_select()
+        self.container_spec_select <= self.spec_select
+        self.bind()
+        self.read_history_from_localstorage()
+        window.onhashchange = self.body_hashchange
+        self.body_hashchange()
+        self._expand_aoa_dct = dict()
+        
+    def cleanup(self):
+        self.container_release.clear()
+        self.container_topchar.clear()
+        self.container_topchar2.clear()
+        self.container_output.clear()
+        self.container_level.clear()
+        if is_rrc(self.spec) or is_core(self.spec):
+            self.btn_copytree.style.color = ""
+            self.btn_export_xlsm.style.color = ""
+        else:
+            self.btn_copytree.style.color = "lightgrey"
+            self.btn_export_xlsm.style.color = "lightgrey"
+        if is_rrc(self.spec):
+            self.btn_expand_all.style.color = ""
+        else:
+            self.btn_expand_all.style.color = "lightgrey"
+        self.btn_expand_all.text = "expand all"
+
+    def bind(self):
+        for callback_func_name in dir(self):
+            if callback_func_name.startswith("callback_"):
+                event_name = callback_func_name.split("_")[1]
+                element_name = "_".join(callback_func_name.split("_")[2:])
+                callback_func = getattr(self, callback_func_name)
+                if hasattr(self, element_name):
+                    element = getattr(self, element_name)
+                    element.bind(event_name, callback_func)
+
+    def body_hashchange(self, e=None):
+        anchor = self.anchor
+        if anchor == '':
+            self.callback_change_spec_select()
+        else:
+            if anchor[:8] in ch5_spec_list:
+                spec = anchor[:8]
+                arg = anchor[8:]
+            else:
+                spec = anchor[:5]
+                arg = anchor[5:]
+            self.set_spec(spec)
+            self.arg = arg
+            self.cleanup()
+            self.update_container_topchar()
+            if self.arg == "" or self.arg_is_topchar():
+                self.update_container_output_by_topchar()
+            else:
+                self.update_container_output_by_message()
+        create_level_div(self)
+        window.scrollTo(0,0)
+        document.title = self.document_title
+    
+    @property
+    def anchor(self):
+        anchor = window.location.hash.replace('#', '')
+        anchor = window.decodeURI(anchor)
+        return anchor
+
+    @property
+    def spec(self):
+        return get_select_value(self.spec_select)
+
+    def set_spec(self, v):
+        return set_select_value(self.spec_select, v)
+
+    @property
+    def obj(self):
+        return self.specdata[self.spec]
+        
+    @property
+    def release(self):
+        return self.obj.release
+
+    @property
+    def topchar_list(self):
+        if is_rrc(self.spec) or is_core(self.spec) or is_nas(self.spec):
+            return ["TOC"] + self.obj.topchar_list
+        else:
+            return self.obj.topchar_list
+
+    @property
+    def topchar_list2(self):
+        return self.obj.topchar_list2
+
+    @property
+    def topchar_dict(self):
+        return self.obj.topchar_dict
+
+    @property
+    def message_list(self):
+        if self.arg == "":
+            self.arg = self.topchar_list[0]
+        return self.topchar_dict[self.arg]
+
+    @property
+    def message_dict(self):
+        return self.obj.message_dict
+
+    @property
+    def ie_dict(self):
+        # only for NAS
+        return self.obj.ie_dict
+
+    def arg_is_topchar(self):
+        try:
+            return self.arg in self.topchar_list2
+        except:
+            return self.arg in self.topchar_list
+
+    def get_aoa(self, arg=None):
+        if arg is None:
+            arg = self.arg
+        return self.message_dict[arg]
+
+    def arg_is_nas_message(self):
+        return self.arg in self.message_dict
+
+    def arg_is_nas_ie(self, ie=None):
+        if ie is None:
+            ie = self.arg
+        return ie in self.ie_dict
+
+    def get_nas_message(self):
+        o = self.obj
+        n = o.message_dict[self.arg]
+        return o.msg_list[n]
+        
+    def get_nas_ie(self, ie=None):
+        if ie is None:
+            ie = self.arg
+        o = self.obj
+        n = o.ie_dict[ie]
+        return o.ie_list[n]
+
+    def get_24008_ie(self, ie):
+        o = self.specdata["24008"]
+        n = o.ie_dict[ie]
+        return o.ie_list[n]
+        
+    @property
+    def document_title(self):
+        return f"{self.spec} {self.arg}"
+
+    ########################################################################
+    #                          ch5
+    ########################################################################
+    def get_ch5_section(self, spec, message):
+        try:
+            o = self.specdata[spec]
+            n = o.message_dict[message]
+            return o.section_list[n]
+        except:
+            return None
+
+    def get_prev_ch5_section(self):
+        print(self.arg)
+        try:
+            o = self.specdata[self.spec]
+            n = o.id2index[self.arg]
+            print(n)
+            return o.section_list[n-1]
+        except:
+            print(self.arg)
+            return None
+
+    def get_next_ch5_section(self):
+        print(self.arg)
+        try:
+            o = self.specdata[self.spec]
+            n = o.id2index[self.arg]
+            return o.section_list[n+1]
+        except:
+            print(self.arg)        
+            return None
+
+    ########################################################################
+    #                          topchar
+    ########################################################################
+    def update_container_topchar(self):
+        ele = self.container_release
+        ele.clear()
+        ele <= B(self.release)
+        ele = self.container_topchar
+        ele.clear()
+        for c in self.topchar_list:
+            ele <= A(c, href=f"#{self.spec}{c}")
+
+    def callback_change_spec_select(self, event=None):
+        window.location.hash = f"#{self.spec}"
+        self.body_hashchange()
+
+    def update_container_output_by_topchar(self):
+        if is_ch5(self.spec):
+            self.update_container_output_by_topchar_for_ch5()
+            return
+        if (self.arg == "" or self.arg == "TOC") and is_rrc(self.spec):
+            self.update_container_output_by_topchar_for_rrc_toc()
+            return
+        if (self.arg == "" or self.arg == "TOC") and is_core(self.spec):
+            self.update_container_output_by_topchar_for_core_toc()
+            return
+        if (self.arg == "" or self.arg == "TOC") and is_nas(self.spec):
+            self.update_container_output_by_topchar_for_nas_toc()
+            return
+        message_list = self.message_list
+        ele = self.container_output
+        ele.clear()
+        ele <= DIV(B(f"-- {self.release} {self.arg} -- "))
+        for c in message_list:
+            ele <= DIV(A(c, href=f"#{self.spec}{c}"))
+
+    def update_container_output_by_topchar_for_nas_toc(self):
+        if self.spec == "24008":
+            msg_list = self.obj.msg_list
+            ie_list = self.obj.ie_list
+            msg = 'Messages'
+            ie = 'information elements'
+            toc = zip([msg_list, ie_list], [msg, ie])
+        else:
+            msg_list = self.obj.msg_list
+            mm_list = [m for m in msg_list if m.id.startswith('8.2')]
+            sm_list = [m for m in msg_list if m.id.startswith('8.3')]
+            d5_list = [m for m in msg_list if m.id.startswith('D.5')]
+            ie_list = self.obj.ie_list
+            generation = 'EPS' if self.spec == '24301' else "5GS"
+            mm = '{} mobility management messages'.format(generation)
+            sm = '{} session management messages'.format(generation)
+            d5 = 'UE policy delivery protocol messages'
+            ie = 'information elements'
+            toc = zip([mm_list, sm_list, d5_list, ie_list], [mm, sm, d5, ie])
+        ele = self.container_output
+        ele.clear()
+        table = TABLE()
+        ele <= table
+        style = {"padding-left":"50px"}
+        for i, pair in enumerate(toc):
+            lst, s = pair
+            if lst:
+                if i:
+                    table <= TR(TD(HR(), colspan='2'))
+                table <= TR(TD(B(s), colspan='2'))
+                for m in lst:
+                    table <= TR(TD(m.id)+TD(A(f'{m.name}', href=f'#{self.spec}{m.name}'), style=style))
+
+    def update_container_output_by_topchar_for_rrc_toc(self):
+        toc = self.get_rrc_toc()
+        ele = self.container_output
+        ele.clear()
+        table = TABLE(Class='toctable')
+        ele <= table
+        for i, row in enumerate(toc):
+            flag, level, name = row
+            tr = TR()
+            table <= tr
+            tr <= TD(flag, Class='flag')
+            tr <= TD(level, Class='level')
+            if level:
+                td = TD(A(name, href=f'#{self.spec}{name}'))
+            else:
+                td = TD(name)
+            tr <= td
+            bind_flag(td)                        
+            set_indent(td, level)
+            tr <= TD(i)
+
+    def get_rrc_toc(self):
+        toc = self.obj.toc
+        width = max([len(row[0].split('\t')[0]) for row in toc if row[1] == 0])
+        result = []
+        for row in toc:
+            name, level = row
+            if level == 0:
+                sid, sname = name.split('\t')
+                span = SPAN(sid.strip())
+                span.style.width = f"{width}ch"
+                span.style.display = 'inline-block'
+                span2 = SPAN(sname.strip())
+                result.append(['', level, span+span2])
+            else:
+                result.append(['', level, name])
+        for p, n in zip(result[:-1], result[1:]):
+            pl = p[1]
+            nl = n[1]
+            if pl == nl - 1:
+                p[0] = '-'
+        return result
+
+    def update_container_output_by_topchar_for_core_toc(self):
+        toc = self.obj.toc
+        ele = self.container_output
+        ele.clear()
+        table = TABLE(Class='toctable')
+        ele <= table
+        for i, row in enumerate(toc):
+            flag, level, sid, width, sname = row
+            tr = TR()
+            table <= tr            
+            tr <= TD(flag, Class='flag')
+            tr <= TD(level, Class='level')
+            span = SPAN(sid)
+            span.style.width = f"{width}ch"
+            span.style.display = 'inline-block'
+            if sname in self.message_dict:
+                td = TD(span+A(sname, href=f'#{self.spec}{sname}'))
+            else:
+                td = TD(span+sname)
+            tr <= td
+            bind_flag(td)                
+            set_indent(td, level-2)
+            tr <= TD(i)
+
+    def update_container_output_by_topchar_for_ch5(self):
+        toc = self.obj.toc
+        if self.arg == "":
+            self.arg = self.topchar_list[0]  # 5
+        ele = self.container_topchar2
+        ele.clear()
+        div = DIV()
+        ele <= div
+        if self.arg != "5":
+            up = ".".join(self.arg.split(".")[:-1])
+            div <= A(f"Up {up}", href=f'#{self.spec}{up}')
+        prev = [self.get_prev_ch5_section(), "Prev"]
+        next = [self.get_next_ch5_section(), "Next"]
+        for ss, text in [prev, next]:
+            if ss is not None:
+                div <= A(f"{text} {ss.id}", href=f'#{self.spec}{ss.id}', title=ss.name)
+            
+        prefix = f"{self.arg}."
+        # ele = self.container_topchar2
+        # ele.clear()
+        # if self.arg != "5":
+            # son_level = prefix.count(".")+1
+            # # ele <= SPAN(B(f"{self.arg}: "))
+            # for i, row in enumerate(toc):
+                # flag, level, sid, width, sname = row
+                # if sid.startswith(prefix) and level == son_level:
+                    # # ele <= A(sid.split(".")[-1], href=f'#{self.spec}{sid}', style={"padding-right":"10px"})
+                    # ele <= A(sid, href=f'#{self.spec}{sid}', style={"padding-right":"10px"})
+        ele = self.container_output
+        ele.clear()
+        table = TABLE(Class='toctable')
+        ele <= table
+        for i, row in enumerate(toc):
+            flag, level, sid, width, sname = row
+            if sid != self.arg and not sid.startswith(prefix):
+                continue
+            tr = TR()
+            table <= tr            
+            tr <= TD(flag, Class='flag')
+            tr <= TD(level, Class='level')
+            span = SPAN(sid)
+            span.style.width = f"{width}ch"
+            span.style.display = 'inline-block'
+            section = self.get_ch5_section(self.spec, sid)
+            if section.aoa:
+                td = TD(span+A(sname, href=f'#{self.spec}{sid}'))
+            else:
+                td = TD(span+sname)
+            tr <= td
+            set_indent(td, level-2)
+            bind_flag(td)
+            tr <= TD(i)
+
+
+    # ########################################################################
+    # #                          History
+    # ########################################################################
+    def callback_click_btn_history(self, event=None):
+        ele = self.container_pin
+        v = ele.style.display
+        ele.style.display = "" if v == "none" else "none"
+
+    def callback_click_btn_pin(self, event=None):
+        t = [self.spec, self.arg]
+        if t not in self.hist:
+            self.hist.append(t)
+        self.refresh_history()
+
+    def refresh_history(self):
+        self.hist = sorted(self.hist)
+        ele = self.container_pin
+        ele.clear()
+        table = TABLE()
+        ele <= table
+        for spec, arg in self.hist:
+            tr = TR()
+            table <= tr
+            try:
+                section = self.get_ch5_section(spec, arg)
+                s = B(spec) + f": {section.id} {section.name}"
+            except:
+                s = B(spec) + f": {arg} "
+            tr <= TD(A(s, href=f"#{spec}{arg}"))
+            tr <= TD("x", spec=spec, arg=arg, Class="close")
+            tr.cells[-1].bind("click", self.click_to_close)            
+        self.write_history_to_localstorage()
+            
+    def click_to_close(self, event):
+        t = event.target
+        self.hist.remove([t.spec, t.arg])
+        self.write_history_to_localstorage()
+        while t.tagName != "TR":
+            t = t.parent
+        t.remove()
+
+    def write_history_to_localstorage(self):
+        s = ','.join([f"{spec}:{arg}" for spec, arg in self.hist])
+        window.localStorage.setItem(localStorage_key, s)
+
+    def read_history_from_localstorage(self):
+        try:
+            s = window.localStorage.getItem(localStorage_key).strip()
+        except:
+            s = ""
+        if s == "":
+            window.localStorage.setItem(localStorage_key, "")
+            self.hist = []
+            return
+        l = [i.split(":") for i in s.split(",")]
+        self.hist = l
+        self.refresh_history()
+
+    ########################################################################
+    #                          Message
+    ########################################################################
+    def update_container_output_by_message(self):
+        if is_nas(self.spec):
+            self.update_container_output_by_message_for_nas()
+            return
+        if is_ch5(self.spec):
+            self.update_container_output_by_message_for_ch5()
+            return
+        ele = self.container_output
+        ele.clear()
+        aoa = self.get_aoa()
+        table = TABLE()
+        if is_rrc(self.spec):
+            head = ["", "", "IE", "Need", "Type", "Value", "CH5", "ASN1"]
+        else:
+            head = ["", "", "IE", "Need", "Refer", "Value", "Crit", "Assign"]
+        table <= TR([TD(B(s)) for s in head])
+        for d in aoa:
+            table <= self.create_tree_tr(d)
+        ele <= table
+        table.bind('mouseover', self.onmouseover_table)
+
+    def create_tree_tr(self, d, pad_prefix='', start_level=0):
+        if is_rrc(self.spec):
+            flag, treepad, level, need, ie, refer, udf, value, desc, ch5link = d
+        else:
+            flag, treepad, level, need, ie, refer, udf, value, desc, crit, assign = d
+        treepad = pad_prefix + treepad
+        level = start_level + level
+        tr = TR()
+        tr <= TD(flag, Class="flag")
+        tr <= TD(level, Class="level")
+        
+        ie_td = TD(Class="ie_td")
+        tr <= ie_td
+        ie_td <= SPAN(treepad, Class="treepad")
+        ie_span = SPAN(ie, Class="ie")
+        ie_td <= ie_span
+        ele = ie_span
+        bind_flag(ele)        
+        ch5 = False
+        for s in ["<br><a", "<a"]:
+            if s in desc:
+                i = desc.index(s)
+                desc = desc[:i]
+                ch5 = True
+                break
+        if desc:
+            ele.desc = desc
+                
+        tr <= TD(need, Class="need")
+        refer_td = TD(Class="refer")
+        tr <= refer_td
+        if refer:
+            refer_td <= A(refer, href=f"#{self.spec}{udf}")
+            
+        enu = format_enumerated(value)
+        if enu:
+            tr <= TD(value, desc=enu, Class="value")
+        else:
+            tr <= TD(value, Class="value")
+            
+        if is_rrc(self.spec):
+            ch5_td = TD()
+            tr <= ch5_td
+            asn1_td = TD()
+            tr <= asn1_td
+            if ch5:
+                ch5_td <= A("CH5", href=f"#{self.spec}ch5{ie}")
+            if udf:
+                asn1_td <= A("ASN1", href=f"{g_rel_path}{self.spec}_asn1.html#{udf}", target=f"{self.spec}asn1")
+            elif ie[0] in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ':
+                asn1_td <= A("ASN1", href=f"{g_rel_path}{self.spec}_asn1.html#{ie}", target=f"{self.spec}asn1")
+        else:
+            tr <= TD(crit, Class="crit")
+            tr <= TD(assign, Class="assign")
+        return tr
+
+    def append_child(self, tr):
+        udf = get_udf(tr)
+        aoa = self.get_remain(udf)
+        if aoa:
+            start_level = get_level(tr)
+            pad_prefix = get_treepad(tr)
+            pad_prefix = pad_prefix.replace(r"└", r" ").replace(r"├", r"│").replace(r"─", r" ")
+            cur = tr
+            for d in aoa:
+                new = self.create_tree_tr(d, pad_prefix, start_level)
+                cur.insertAdjacentElement("afterend", new)
+                cur = new
+            set_flag(tr, '-')
+        else:
+            set_flag(tr, '')
+
+    def callback_click_btn_expand_all(self, event):
+        if is_rrc(self.spec) and self.arg in self.message_dict:
+            pass
+        else:
+            return
+        table = self.container_output.select("table")[0]
+        b = event.target
+        if b.html.startswith('expand all'):
+            b.text = 'init view'
+            table.clear()
+            head = ["", "", "IE", "Need", "Type", "Value", "CH5", "ASN1"]
+            table <= TR([TD(B(s)) for s in head])
+            t0 = window.Date.now()
+            for row in self.get_expand_aoa():
+                table <= self.create_tree_tr(row)
+            create_level_div(self)
+            t1 = window.Date.now()
+            print(f'callback_click_btn_expand_all() {t1-t0}ms for {self.anchor}')
+        else:
+            b.text = 'expand all'
+            self.body_hashchange()
+            # self.update_container_output_by_message()
+        
+        # if b.html.startswith('expand all'):
+            # b.html = 'init view'
+            # t0 = window.Date.now()
+            # table.html = ''
+            # self.creat_head_row(table)
+            # result = self.get_expand_aoa()
+            # if result is None:
+                # t2 = window.Date.now()
+                # result = self.create_expand_aoa()
+                # t3 = window.Date.now()
+                # print(f'create_expand_aoa {t3-t2}ms to expand {self.anchor}')
+            # for row in result:
+                # table <= self.create_tree_tr(row)
+            # if table.tview == 'table':
+                # for span in table.select('.iepad'):
+                    # span.html = span.tablepad
+                # table.select('.iepad')[0].html = ''
+            # t1 = window.Date.now()            
+            # print(f'create_expand_table {t1-t0}ms to expand {self.anchor}')
+            # for tr in table.rows:
+                # tr.cells[-1].html = tr.rowIndex
+            # ready.create_level_div(table)
+            # ready.set_width_for_asn1_table(table)            
+        # else:
+            # self.create_tree()
+
+    def get_expand_aoa(self):
+        anchor = self.anchor
+        if anchor in self._expand_aoa_dct:
+            return self._expand_aoa_dct[anchor]
+        else:
+            t0 = window.Date.now()
+            self._expand_aoa_dct[anchor] = self.create_expand_aoa()
+            t1 = window.Date.now()
+            print(f'create_expand_aoa() {t1-t0}ms for {self.anchor}')
+            return self._expand_aoa_dct[anchor]
+            
+    def create_expand_aoa(self):
+        col_flag2, col_treepad2, col_level2, col_need2, col_ie2, col_refer2, col_udf2, col_value2, col_desc2, col_ch52 = list(range(10))
+        result = [row[::] for row in self.get_aoa()]
+        i = 1
+        while i < len(result):
+            row = result[i]
+            udf = row[col_udf2]
+            if udf != 'RRCReconfiguration' and row[col_flag2] == '+':
+                aoa = self.get_remain(udf)
+                pad = row[col_treepad2].replace(r"└", r" ").replace(r"├", r"│").replace(r"─", r" ")
+                level = row[col_level2]
+                idx = i+1
+                for ra in aoa[::-1]:
+                    tmp = ra[::]
+                    tmp[col_treepad2] = pad + tmp[col_treepad2]
+                    tmp[col_level2] = level + tmp[col_level2]
+                    result.insert(idx, tmp)
+            i += 1
+        #
+        for i in range(len(result)-1):
+            if row[col_udf2] == 'RRCReconfiguration':
+                continue
+            if result[i][col_level2] == result[i+1][col_level2] - 1:
+                result[i][col_flag2] = '-'
+            else:
+                result[i][col_flag2] = ''
+        result[-1][col_flag2] = ''
+        return result
+
+    def get_remain(self, udf):
+        aoa = self.get_aoa(udf)
+        next_udf = aoa[0][6]  # col_udf
+        if next_udf:
+            return self.get_remain(next_udf)
+        else:
+            return aoa[1:]
+
+    def onmouseover_table(self, e):
+        s_ie_path = get_ie_path(e.target)
+        fddiv = self.fd
+        # if self.is_popup_enabled() and hasattr(e.target, "desc") and e.target.desc:
+        if self.is_popup_enabled():
+            text = ""
+            if hasattr(e.target, "desc") and e.target.desc:
+                text = e.target.desc
+            if text == "" and s_ie_path == "":
+                return
+            o = e.target.getBoundingClientRect()
+            eleleft = int(o.left + window.scrollX)
+            eletop = int(o.top + window.scrollY)
+            eleright = int(o.right + window.scrollX)
+            elebottom = int(o.bottom + window.scrollY)
+            if e.target.className == 'ie':
+                fddiv.style.left = eleright - 5
+            else:
+                fddiv.style.left = e.pageX + 1
+            fddiv.style.left = e.pageX + 1
+            fddiv.style.top = elebottom - 2
+            fddiv.clear()
+            if s_ie_path:
+                fddiv <= DIV(s_ie_path)
+            if s_ie_path and text:
+                fddiv <= HR()
+            if text:
+                fddiv <= DIV(text)
+            fddiv.style.display = ''
+            return
+            #
+        fddiv.style.display = 'none'
+
+    ########################################################################
+    #                          ch5
+    ########################################################################
+    def update_container_output_by_message_for_ch5(self):
+        section = self.get_ch5_section(self.spec, self.arg)
+        search = section is None
+        if search:
+            aoa = self.get_ch5_search_aoa()
+            ele = self.container_topchar2
+            ele.clear()
+            ele <= B(f"Search Result for {self.arg} in {self.spec}")
+        else:
+            aoa = section.aoa
+            ele = self.container_topchar2
+            ele.clear()
+            div = DIV()
+            ele <= div
+            up = ".".join(self.arg.split(".")[:-1])
+            div <= A(f"Up {up}", href=f'#{self.spec}{up}')
+            prev = [self.get_prev_ch5_section(), "Prev"]
+            next = [self.get_next_ch5_section(), "Next"]
+            for ss, text in [prev, next]:
+                if ss is not None:
+                    div <= A(f"{text} {ss.id}", href=f'#{self.spec}{ss.id}', title=ss.name)
+
+        ele = self.container_output
+        ele.clear()
+        table = TABLE(Class='ch5content')
+        ele <= table
+        for r, row in enumerate(aoa):
+            flag, level, v, num = row
+            tr = TR()
+            table <= tr
+            tr <= TD(flag, Class='flag')
+            tr <= TD(level, Class='level')
+            v = v.replace('\t', '&emsp;')
+            if level == -1:
+                v = '<br>'.join(v.split('\n')[1:])
+                td = TD(B(v))
+            else:
+                v = v.replace('\n', '<br>'*2)
+                a = '<a href="#'
+                v = v.replace(a, a+self.spec)
+                td = TD(v)
+                set_indent(td, level)
+            tr <= td
+            bind_flag(td)            
+            tr <= TD(num)                
+        if search:
+            window.find(self.arg)
+
+    def get_ch5_search_aoa(self):
+        text = remove_ie_suffix(self.arg)
+        ies = self.obj.ies
+        if text in ies:
+            result = []
+            num = 0
+            for i in ies[text]:
+                s = self.obj.section_list[i]
+                for row in s.aoa:
+                    if text in row[2]:
+                        result.append(copy_row(row, text, num, s.headline))
+                        num += 1
+                    else:
+                        result.append(row)
+            return result
+        else:
+            return []
+
+    ########################################################################
+    #                          nas
+    ########################################################################
+    def update_container_output_by_message_for_nas(self):
+        ele = self.container_output
+        ele.clear()
+        if self.arg_is_nas_message():
+            m = self.get_nas_message()
+            ele <= P(m.id + ' ' + m.name + '\n' + m.definition, Class='nas_definition')
+            table = TABLE(id='nas_msgtable')
+            ele <= table
+            for row in m.aoa:
+                tr = TR([TD(v) for v in row[:-1]])
+                table <= tr
+                try:
+                    if row[6]:
+                        lines = row[6].split("\n")
+                        lines[0] = f"<b>{lines[0]}</b>"
+                    else:
+                        lines = []
+                    iename, ieid = row[2].split("\n")
+                    if self.arg_is_nas_ie(ieid):
+                        ie = self.get_nas_ie(ieid)
+                        tr.cells[2].clear()
+                        tr.cells[2] <= A(ieid, title=iename, href=f"#{self.spec}{ieid}")
+                        lines.append(f"<b>{ie.id} {ie.name}</b>")
+                        lines.append(self.sniff_24008_link(ie.definition))
+                    s = "\n".join(lines).strip()
+                    if s:
+                        tr.cells[1].desc = s
+                except Exception as err:
+                    print(err, row)
+            table.bind('mouseover', self.onmouseover_table)
+        elif self.arg_is_nas_ie():
+            ele.html = self.get_nas_ie().html_text
+            self.sniff_24008_ie(ele)
+        
+    def sniff_24008_link(self, ie_text):
+        try:
+            lines = ie_text.split("\n")
+            lines[0] = self.sniff_24008_line(lines[0])
+            return "\n".join(lines)
+        except:
+            return ie_text
+
+    def sniff_24008_ie(self, ele):
+        for p in ele.select('p'):
+            try:
+                p.html = self.sniff_24008_line(p.text)
+            except:
+                pass
+
+    def sniff_24008_line(self, line):
+        lst = [s for s in line.split(' ') if s]
+        try:
+            if lst[0] == 'See' and lst[1] == 'subclause' and lst[3] == 'in' and lst[4] == '3GPP' and lst[5] == 'TS' and lst[6] == '24.008':
+                ieid = lst[2]
+                name = self.get_24008_ie(ieid).name
+                lst[2] = f'<a href="#{24008}{name}">{lst[2]}</a>'
+                return ' '.join(lst)
+        except:
+            return line
+
+    ########################################################################
+    #                          button
+    ########################################################################
+    def callback_click_fd(self, event):
+        copy_element(self.fd)
+        
+    def callback_click_btn_copytree(self, event):
+        if not (is_rrc(self.spec) or is_core(self.spec)) :
+            return
+        if self.arg == "":
+            return
+        trs = self.container_output.select("table")[0].select("tr")[1:]
+        treefmt = [get_treepad(tr)+get_ie(tr) for tr in trs if tr.style.display != 'none']
+        text = '\n'.join(treefmt)
+        d = DIV(PRE(text))
+        document.body <=  d
+        copy_element(d)
+        d.remove()
+
+    def callback_click_btn_export_xlsm(self, event):
+        if not (is_rrc(self.spec) or is_core(self.spec)) :
+            return
+        if self.arg == "":
+            return
+        message = self.arg
+        trs = self.container_output.select("table")[0].select("tr")[1:]
+        if is_rrc(self.spec):
+            head = ['', '', 'IE', 'Need', 'Type', 'Range', 'Description', '']
+        else:
+            head = ['', '', 'IE', 'Presence', 'Refer', 'Range', 'Description', 'Criticality', 'Assigned']
+        aoa = [head]
+        for tr in trs:
+            t = [get_flag(tr), 
+                 get_level(tr), 
+                 ">"*get_level(tr) + " " + get_ie(tr),
+                 get_need(tr),
+                 get_udf(tr),
+                 get_value(tr),
+                 get_desc(tr)]
+            if is_rrc(self.spec):
+                t.append("")
+            else:
+                t.append(get_crit(tr))
+                t.append(get_assign(tr))
+            t[6] = t[6].replace('<b>', '').replace('</b>', '').replace('<br>', '\n').strip()
+            aoa.append(t)
+        xlsx_name = f'{self.spec} {message}.xlsm'
+        sheet_name = message[:31]
+        export_xlsx(aoa, xlsx_name, sheet_name)
+        
+    def callback_click_btn_popup(self, event):
+        if self.btn_popup.text == "Popup On":
+            self.btn_popup.text = "Popup Off"
+            self.btn_popup.style.backgroundColor = "red"
+            self.fd.style.display = 'none'
+        else:
+            self.btn_popup.text = "Popup On"
+            self.btn_popup.style.backgroundColor = "lightgreen"
+
+    def is_popup_enabled(self):
+        return self.btn_popup.text == "Popup On"
+        
+    def callback_mouseleave_fd(self, event):
+        self.fd.style.display = 'none'
+
+#############################################################################
+# copy
+#############################################################################
+    
+def copy_element(e):
+    window.getSelection().empty()
+    range = document.createRange()
+    range.selectNode(e)
+    window.getSelection().addRange(range)
+    document.execCommand('copy')
+    window.getSelection().empty()
+
+
+#############################################################################
+# export_xlsx
+#############################################################################
+def export_xlsx(aoa, xlsx_name, sheet_name):
+    ws = window.XLSX.utils.aoa_to_sheet(aoa)
+    wb = window.XLSX.utils.book_new()
+    window.XLSX.utils.book_append_sheet(wb, ws, sheet_name)
+    
+    add_xlsm_guide(wb, sheet_name)
+    window.XLSX.writeFile(wb, xlsx_name)
+
+_vba_code = """
+Private Sub Worksheet_BeforeDoubleClick(ByVal Target As Range, Cancel As Boolean)
+    If Target.Column > 1 Then
+        Exit Sub
+    End If
+    Cancel = True
+    Row = Target.Row
+    Column = Target.Column
+    before_tag = ActiveCell.Value
+    ancestor_level = ActiveSheet.Cells(Row, 2)
+    If before_tag = "-" Then
+        ActiveCell.Value = "+"
+        For n = Row + 1 To ActiveCell.CurrentRegion.Rows.Count
+            next_level = ActiveSheet.Cells(n, 2)
+            Tag = ActiveSheet.Cells(n, 1)
+            If next_level > ancestor_level Then
+                If Tag = "-" Then
+                    ActiveSheet.Cells(n, 1).Value = "+"
+                End If
+                ActiveSheet.Rows(n).Hidden = True
+            Else
+                Exit Sub
+            End If
+        Next n
+    ElseIf before_tag = "+" Then
+        ' expand son, hide all grandchild level
+        ActiveCell.Value = "-"
+        son_level = ancestor_level + 1
+        For n = Row + 1 To ActiveCell.CurrentRegion.Rows.Count
+            next_level = ActiveSheet.Cells(n, 2)
+            Tag = ActiveSheet.Cells(n, 1)
+            If next_level = son_level Then
+                If Tag = "-" Then
+                    ActiveSheet.Cells(n, 1).Value = "+"
+                End If
+                ActiveSheet.Rows(n).Hidden = False
+            ElseIf next_level > son_level Then
+                If Tag = "-" Then
+                    ActiveSheet.Cells(n, 1).Value = "+"
+                End If
+                ActiveSheet.Rows(n).Hidden = True
+            Else
+                Exit Sub
+            End If
+        Next n
+    Else
+        Exit Sub
+    End If
+End Sub
+
+Private Sub Worksheet_Change(ByVal Target As Range)
+    ' trigger collapse to level
+    ' level larger than selected shall be hide
+    If Target.Row = 1 And Target.Column = 1 Then
+        Level = ActiveSheet.Cells(1, 1)
+        For n = 2 To ActiveCell.CurrentRegion.Rows.Count
+            cl = ActiveSheet.Cells(n, 2)
+            mark = ActiveSheet.Cells(n, 1)
+            If cl < Level Then
+                ActiveSheet.Rows(n).Hidden = Flase
+                If mark <> "" Then
+                    ActiveSheet.Cells(n, 1).Value = "-"
+                End If
+            ElseIf cl = Level Then
+                ActiveSheet.Rows(n).Hidden = False
+                If mark <> "" Then
+                    ActiveSheet.Cells(n, 1).Value = "+"
+                End If
+            Else
+                ActiveSheet.Rows(n).Hidden = True
+                If mark <> "" Then
+                    ActiveSheet.Cells(n, 1).Value = "+"
+                End If
+            End If
+        Next n
+    End If
+End Sub
+"""
+
+
+def add_xlsm_guide(wb, sheet_name):
+    aoa = [
+            ["add VBA code to utilize xlsm"],
+            [" 1. copy vba code in A8"],
+            [" 2. Menu->Developer->Visual Basic"],
+            [f" 3. double click 'Sheet1 ({sheet_name})' "],
+            [" 4. paste code"],
+            [f" then in worksheet '{sheet_name}', column A, double click: '-' to collapse IE, '+' to expanse IE"],
+            [""],
+            [_vba_code, ""]
+          ]
+    ws = window.XLSX.utils.aoa_to_sheet(aoa)
+    window.XLSX.utils.book_append_sheet(wb, ws, "vba_code")
+
+def set_indent(td, level):
+    indent = max(0, int(level))
+    indent = f'{indent*2}em'
+    td.style.paddingLeft = indent
+
+def remove_ie_suffix(text):
+    lst = text.split('-')
+    if lst[-1][0] in 'rv' and lst[-1][1:].isdigit():
+        return '-'.join(lst[:-1])
+    else:
+        return text
+
+def copy_row(row, text, num, headline):
+    lst = row[::]
+    title = f'{num+1}: {headline}'.replace('\t', ' ')
+    lst[2] = lst[2].replace(text, f'<span style="font-weight: bolder; font-size: large;">{text}</span><sub style="color:red;">{title}</sub>')
+    return lst
+
+window.g_app = Asn1App()
+
+
+    </script>    
+</html>

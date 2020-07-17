@@ -1,0 +1,89 @@
+body {
+    width: 90%;
+    margin: 0px 0 80px 40px; /* top, right, bottom, left */
+    font-family: 'Segoe UI', Consolas;
+}
+
+#stick {
+    position: sticky;
+    top: 0;
+    background-color: RGB(240,240,240);
+}
+
+#top a {
+    margin: 0px 12px 0px 0px;  /* top, right, bottom, left */
+}
+
+#output {
+    margin: 20px 0 0 0; /* top, right, bottom, left */
+}
+
+/*
+a:visited{
+  color:blue;
+}
+*/
+
+#indextable td {
+    font-family: Consolas;
+    border-collapse: collapse;
+    white-space: pre;
+    border-width: 0;
+    border-spacing: 0;
+    padding: 0px 80px 0px 0px;  /* top, right, bottom, left */
+}
+
+.definition {
+    font-family: Consolas;
+    white-space: pre-wrap;
+}
+
+table#msgtable {
+    width: auto;
+    max-width: 80%;
+    border: solid 1px;
+    border-width: 0 1px 1px 0;
+    border-spacing: 0;
+    border-color: black;
+}
+
+table#msgtable td  {
+    font-family: 'Segoe UI', Arial;
+    font-size: small;
+    border: solid 1px;
+    border-width: 1px 0 0 1px;
+    border-color: black; 
+    padding: 2px 5px 2px 5px;  /* top, right, bottom, left */
+}
+
+.r0 {
+    background-color: yellow;
+}
+
+.c0 {
+    white-space: pre;
+}
+
+.c1 {
+    white-space: pre;
+}
+
+.c2 {
+    white-space: pre;
+}
+
+.c3 {
+    white-space: pre;
+}
+
+.c4 {
+    white-space: pre;
+}
+
+.c5 {
+    white-space: pre;
+}
+
+.c6 {
+    white-space: pre-wrap;
+}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Index</title>
+        <script src='brython.js'></script>
+    </head>
+    <body onload="brython(1)">
+        <div id='output'>This pages must open with Firefox</div>
+        
+<script type='text/python'>
+from browser import document, window
+from browser.html import A, UL, LI
+
+with open('index.json', encoding='utf-8') as f:
+    s = f.read()
+    o = window.JSON.parse(s)
+    ul = UL()
+    for i in o:
+        ul <= LI(A(i, href=f'{i}.html'))
+    document['output'].clear()
+    document['output'] <= ul
+
+</script>
+    </body>
+</html>
