@@ -1,0 +1,71 @@
+body {
+    font-family: Verdana, "Segoe UI", Tahoma, Consolas, Courier;
+    margin-bottom: 300px;
+}
+
+table {
+    border: solid 1px;
+    border-width: 0 1px 1px 0;
+    border-spacing: 0;
+    margin: 5px 0 5px 0;
+}
+
+td {
+    font-size: small;  
+    border: solid 1px;
+    border-width: 1px 0 0 1px;
+}
+
+.zone-input caption,
+.zone-info  caption,
+.zone-output caption {
+    font-size: small;
+    background-color: rgb(230,230,230);
+}
+
+.zone-input td,
+.zone-input select,
+.zone-input option {
+    padding: 2px 5px 2px 5px;    
+    font-size: small;
+}
+
+/* .zone-info  td { */
+    /* padding: 2px 5px 2px 5px; */
+/* } */
+
+.zone-output td {
+    font-size: x-small;
+}
+
+.head-a1 {
+    white-space: nowrap;
+    background-color: rgb(230,230,230);
+    font-weight: normal;
+    text-align: center;
+}
+
+.head-row {    
+    white-space: nowrap;
+    background-color: rgb(230,230,230);
+    font-weight: normal;
+    text-align: center;
+}
+
+.head-col {    
+    white-space: nowrap;
+    background-color: rgb(230,230,230);
+    font-weight: normal;
+    text-align: center;
+}
+
+
+/* .horizon-output { */
+    /* overflow-x:auto;  */
+    /* width:80%; */
+    /* padding: 20px 5px 20px 5px;  /* top right bottom left */ */
+/* } */
+
+/* .invalid { */
+    /* background-color: grey; */
+/* } */

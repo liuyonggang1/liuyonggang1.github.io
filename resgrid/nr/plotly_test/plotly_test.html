@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" href="../../jscss/style.css">
+        <title>Plotly test</title>
+        <style>
+        body {width: 60%;}
+        .mu0-14 {width: 109px; height: 2px;}
+        .mu1-14 {width: 53px; height: 4px;}
+        .mu2-14 {width: 25px; height: 8px;}
+        .mu2-12 {width: 30px; height: 8px;}
+        .mu3-14 {width: 11px; height: 16px;}
+        .mu4-14 {width: 4px; height: 32px;}
+        .head-a1 {background-color: white;}
+        .slot0 {background-color: lightgreen;}
+        .slot1 {background-color: lightyellow;}
+        .zone-output {font-family: Calibri;}
+        /*.zone-output caption {font-size: medium;}*/
+        </style>
+        <script src='../../jscss/brython.js'></script>
+        <!-- <script src='../../jscss/brython_stdlib.js'></script> -->
+        <script src="../../jscss/plotly.min.js"></script>
+        <script src="jszip.min.js"></script>
+        <script src="pptxgen.min.js"></script>
+        
+        </head>
+    <body onload="brython(1)">
+        <button id="btn_pptx">pptx</button>
+        <div class="zone_head_div">
+          <span><a href="../index.html">Index</a></span>
+          <span id="zone_head"></span>
+        </div>
+        <div class='zone-input' id='zone-input'></div>
+        <div class='zone-output' id='zone-output'></div>
+        <h3>base64</h3>
+        <div id='zone-output1'></div>
+        <script type='text/python'>
+from browser import document, window
+stem = window.location.pathname.split('/')[-1].replace('.html', '')
+document['zone_head'] <= document.title
+exec (f"import {stem}")
+        </script>
+    </body>
+</html>

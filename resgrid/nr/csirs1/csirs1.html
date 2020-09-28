@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" href="../../jscss/style.css">
+        <title>CSI-RS 1</title>
+        <style>
+        .csirs {background-color:red;}
+        .head-row1 {font-size:2em;}
+        </style>
+        <script src='../../jscss/brython.js'></script>
+        <script src='../../jscss/brython_stdlib.js'></script>        
+        </head>
+    <body onload="brython(1)">
+        <div class="zone_head_div">
+          <span><a href="../index.html">Index</a></span>
+          <span id="zone_head"></span>
+        </div>    
+        <div class='zone-input' id='zone-input'></div>
+        <div class='zone-output' id='zone-output'></div>
+        <script type='text/python'>
+from browser import document, window
+stem = window.location.pathname.split('/')[-1].replace('.html', '')
+document['zone_head'] <= document.title
+exec (f"import {stem}")
+        </script>
+    </body>
+</html>
