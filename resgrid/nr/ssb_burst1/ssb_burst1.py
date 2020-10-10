@@ -79,6 +79,7 @@ def create_table2(num_slot_per_sf=None, max_n=None, ilst=None, factor=None):
     # num_symb = total_symb
     
     data = [[row*num_symb_per_slot+i for i in range(num_symb_per_slot)] for row in range(total_sf*num_slot_per_sf)]
+    data = [["" for i in range(num_symb_per_slot)] for row in range(total_sf*num_slot_per_sf)]
     class_data = [["" for i in range(num_symb_per_slot)] for row in range(total_sf*num_slot_per_sf)]
     total_idx = 0
     for n in range(max_n+1):
@@ -86,20 +87,24 @@ def create_table2(num_slot_per_sf=None, max_n=None, ilst=None, factor=None):
             idx = i + factor*n
             r, c = divmod(idx, num_symb_per_slot)
             class_data[r][c] = "start"
+            data[r][c] = total_idx
+            class_data[r][c] = f"idx{total_idx%2}"
             for j in (1,2,3):
                 r, c = divmod(idx+j, num_symb_per_slot)
                 class_data[r][c] = "ssb"
+                # data[r][c] = total_idx
+                class_data[r][c] = f"idx{total_idx%2}"
             total_idx += 1
         if total_idx == 64:
             break
     
-    a1 = [["subframe", "slot"]]
-    x = [["symbol"]*num_symb_per_slot]
+    a1 = [["subframe", "slot"], ["subframe", "slot"]]
+    x = [["symbol"]*num_symb_per_slot, [i for i in range(num_symb_per_slot)]]
     y0 = [sf for sf in range(total_sf) for slot in range(num_slot_per_sf)]
     y1 = [slot for sf in range(total_sf) for slot in range(num_slot_per_sf)]
     y = [y0, y1]
     if num_slot_per_sf == 1:
-        a1 = [["subframe"]]
+        a1 = [["subframe"], ["subframe"]]
         y = [y0]
      
     caption = "SSB Burst half frame"
