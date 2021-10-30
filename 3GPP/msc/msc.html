@@ -6,23 +6,23 @@
         
         <script src='../asn1_js/brython.js'></script>
         <!-- <script src='../asn1_js/3gppdata.js'></script> -->
-        <script src='../asn1_js/data24008.js'></script>
-        <script src='../asn1_js/data24301.js'></script>
-        <script src='../asn1_js/data24501.js'></script>
+        <!-- <script src='../asn1_js/data24008.js'></script> -->
+        <!-- <script src='../asn1_js/data24301.js'></script> -->
+        <!-- <script src='../asn1_js/data24501.js'></script> -->
         <script src='../asn1_js/data36331.js'></script>
-        <script src='../asn1_js/data36331ch5.js'></script>
+        <!-- <script src='../asn1_js/data36331ch5.js'></script> -->
         <script src='../asn1_js/data36413.js'></script>
         <script src='../asn1_js/data36423.js'></script>
-        <script src='../asn1_js/data36443.js'></script>
-        <script src='../asn1_js/data36444.js'></script>
-        <script src='../asn1_js/data36455.js'></script>
-        <script src='../asn1_js/data38331.js'></script>
-        <script src='../asn1_js/data38331ch5.js'></script>
-        <script src='../asn1_js/data38413.js'></script>
-        <script src='../asn1_js/data38423.js'></script>
-        <script src='../asn1_js/data38455.js'></script>
-        <script src='../asn1_js/data38463.js'></script>
-        <script src='../asn1_js/data38473.js'></script>
+        <!-- <script src='../asn1_js/data36443.js'></script> -->
+        <!-- <script src='../asn1_js/data36444.js'></script> -->
+        <!-- <script src='../asn1_js/data36455.js'></script> -->
+        <!-- <script src='../asn1_js/data38331.js'></script> -->
+        <!-- <script src='../asn1_js/data38331ch5.js'></script> -->
+        <!-- <script src='../asn1_js/data38413.js'></script> -->
+        <!-- <script src='../asn1_js/data38423.js'></script> -->
+        <!-- <script src='../asn1_js/data38455.js'></script> -->
+        <!-- <script src='../asn1_js/data38463.js'></script> -->
+        <!-- <script src='../asn1_js/data38473.js'></script> -->
         
         
         
@@ -2707,6 +2707,16 @@ g_protocol_dict = {"":"",
                    "24301":"LTE NAS", 
                    "24501":"NR NAS"}
 
+g_spec_list = ["", 
+               "36331", 
+               "36413", 
+               "36423"] 
+
+g_protocol_dict = {"":"", 
+                   "36331":"LTE RRC", 
+                   "36413":"S1AP", 
+                   "36423":"X2AP"}
+
 
 #############################################################################################
 #                            Common Util                                                    #
@@ -3820,23 +3830,23 @@ try:
 except:
     print("seperate js")
     window.specdata = dict()
-    window.specdata["36331ch5"] = window.specdata_36331ch5
-    window.specdata["38331ch5"] = window.specdata_38331ch5
-    window.specdata["24008"] = window.specdata_24008
-    window.specdata["24301"] = window.specdata_24301
-    window.specdata["24501"] = window.specdata_24501
+#    window.specdata["36331ch5"] = window.specdata_36331ch5
+#    window.specdata["38331ch5"] = window.specdata_38331ch5
+#    window.specdata["24008"] = window.specdata_24008
+#    window.specdata["24301"] = window.specdata_24301
+#    window.specdata["24501"] = window.specdata_24501
     window.specdata["36331"] = window.specdata_36331
-    window.specdata["38331"] = window.specdata_38331
+#    window.specdata["38331"] = window.specdata_38331
     window.specdata["36413"] = window.specdata_36413
     window.specdata["36423"] = window.specdata_36423
-    window.specdata["36443"] = window.specdata_36443
-    window.specdata["36444"] = window.specdata_36444
-    window.specdata["36455"] = window.specdata_36455
-    window.specdata["38413"] = window.specdata_38413
-    window.specdata["38423"] = window.specdata_38423
-    window.specdata["38463"] = window.specdata_38463
-    window.specdata["38473"] = window.specdata_38473
-    window.specdata["36455"] = window.specdata_36455
+#    window.specdata["36443"] = window.specdata_36443
+#    window.specdata["36444"] = window.specdata_36444
+#    window.specdata["36455"] = window.specdata_36455
+#    window.specdata["38413"] = window.specdata_38413
+#    window.specdata["38423"] = window.specdata_38423
+#    window.specdata["38463"] = window.specdata_38463
+#    window.specdata["38473"] = window.specdata_38473
+#    window.specdata["36455"] = window.specdata_36455
 
 
 puml_template = """
