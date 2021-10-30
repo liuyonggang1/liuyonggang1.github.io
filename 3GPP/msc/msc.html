@@ -5,7 +5,24 @@
         <title>MSC Tool for LTE and NR</title>
         
         <script src='../asn1_js/brython.js'></script>
-        <script src='../asn1_js/3gppdata.js'></script>
+        <!-- <script src='../asn1_js/3gppdata.js'></script> -->
+        <script src='../asn1_js/data24008.js'></script>
+        <script src='../asn1_js/data24301.js'></script>
+        <script src='../asn1_js/data24501.js'></script>
+        <script src='../asn1_js/data36331.js'></script>
+        <script src='../asn1_js/data36331ch5.js'></script>
+        <script src='../asn1_js/data36413.js'></script>
+        <script src='../asn1_js/data36423.js'></script>
+        <script src='../asn1_js/data36443.js'></script>
+        <script src='../asn1_js/data36444.js'></script>
+        <script src='../asn1_js/data36455.js'></script>
+        <script src='../asn1_js/data38331.js'></script>
+        <script src='../asn1_js/data38331ch5.js'></script>
+        <script src='../asn1_js/data38413.js'></script>
+        <script src='../asn1_js/data38423.js'></script>
+        <script src='../asn1_js/data38455.js'></script>
+        <script src='../asn1_js/data38463.js'></script>
+        <script src='../asn1_js/data38473.js'></script>
         
         
         
@@ -2653,6 +2670,10 @@ class Description:
 
 
 
+g_timer_color = "darkgreen"
+g_timer_background_color = "white"
+g_timer_fontsize = 10
+
 g_arrow_list = ["->", "-->", "<->", "<-->", "-x", "--x"]
 g_arrow_color_list = ["black", "red", "orange", "green", "blue", "purple", "brown"]
 g_spec_list = ["", 
@@ -2959,7 +2980,8 @@ class MessageTR(BaseTR):
                 pos = "left" if self.timer_owner == self.sender else "right"
             else:
                 pos = "right" if self.timer_owner == self.sender else "left"
-            noteline = f"rnote {pos} #white: <color black><size:10>{self.timer_action} {self.timer_name}</size></color>"
+            # noteline = f"rnote {pos} #white: <color black><size:10>{self.timer_action} {self.timer_name}</size></color>"
+            noteline = f"rnote {pos} #{g_timer_background_color}: <color {g_timer_color}><size:{g_timer_fontsize}>{self.timer_action} {self.timer_name}</size></color>"
             a = {"start":"activate", "stop":"deactivate", "expire":"destroy"}[self.timer_action]
             #b = getattr(self, self.timer_owner)
             b = self.timer_owner
@@ -3791,6 +3813,32 @@ class IESelect:
 
 
 
+try:
+    window.specdata["36331ch5"] = window.ch5data["36331ch5"]
+    window.specdata["38331ch5"] = window.ch5data["38331ch5"]
+    print("allinone")
+except:
+    print("seperate js")
+    window.specdata = dict()
+    window.specdata["36331ch5"] = window.specdata_36331ch5
+    window.specdata["38331ch5"] = window.specdata_38331ch5
+    window.specdata["24008"] = window.specdata_24008
+    window.specdata["24301"] = window.specdata_24301
+    window.specdata["24501"] = window.specdata_24501
+    window.specdata["36331"] = window.specdata_36331
+    window.specdata["38331"] = window.specdata_38331
+    window.specdata["36413"] = window.specdata_36413
+    window.specdata["36423"] = window.specdata_36423
+    window.specdata["36443"] = window.specdata_36443
+    window.specdata["36444"] = window.specdata_36444
+    window.specdata["36455"] = window.specdata_36455
+    window.specdata["38413"] = window.specdata_38413
+    window.specdata["38423"] = window.specdata_38423
+    window.specdata["38463"] = window.specdata_38463
+    window.specdata["38473"] = window.specdata_38473
+    window.specdata["36455"] = window.specdata_36455
+
+
 puml_template = """
 @startuml
 
@@ -3801,23 +3849,21 @@ skinparam roundcorner 2
 skinparam ParticipantBackgroundColor lightgrey
 skinparam ParticipantBorderColor lightgrey
 
-skinparam NoteBackgroundColor #FFFFA8
-skinparam NoteBorderColor lightgrey
+'skinparam NoteBackgroundColor #FFFFA8
 skinparam NoteBorderColor white
 
 skinparam SequenceLifeLineBorderColor black
+skinparam SequenceLifeLineBackgroundColor lightgreen
 
 skinparam SequenceArrowColor black
 
-skinparam SequenceGroupBorderColor #4677BF
-skinparam SequenceGroupHeaderFontColor #4677BF
-skinparam SequenceGroupFontColor #4677BF
-
-skinparam SequenceGroupBorderThickness 1
-skinparam SequenceGroupFontStyle normal
-
-skinparam SequenceGroupHeaderFontStyle normal
-skinparam SequenceGroupBackgroundColor white
+'skinparam SequenceGroupBorderColor #4677BF
+'skinparam SequenceGroupHeaderFontColor #4677BF
+'skinparam SequenceGroupFontColor #4677BF
+'skinparam SequenceGroupBorderThickness 2
+'skinparam SequenceGroupFontStyle normal
+'skinparam SequenceGroupHeaderFontStyle bold
+'skinparam SequenceGroupBackgroundColor white
 
 {participant_str}
 
@@ -3839,6 +3885,8 @@ html_template = """
     </body>
 </html>
 """
+
+
 
 class Msc:
     def __init__(self):
