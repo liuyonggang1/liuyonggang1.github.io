@@ -28,10 +28,10 @@ def main(event):
     ol <= create_table2(num_slot_per_sf=2, max_n=3, ilst=[2, 8], factor=14)
 
     ol <= LI("Case D: 120 kHz SCS, FR2")
-    ol <= create_table2(num_slot_per_sf=8, max_n=18, ilst=[4, 8, 16, 20], factor=28)
+    ol <= create_table2(num_slot_per_sf=8, max_n=[0, 1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 13, 15, 16, 17, 18], ilst=[4, 8, 16, 20], factor=28)
     
     ol <= LI("Case E: 240 kHz SCS, FR2")
-    ol <= create_table2(num_slot_per_sf=16, max_n=8, ilst=[8, 12, 16, 20, 32, 36, 40, 44], factor=56)
+    ol <= create_table2(num_slot_per_sf=16, max_n=[0, 1, 2, 3, 5, 6, 7, 8], ilst=[8, 12, 16, 20, 32, 36, 40, 44], factor=56)
 
 
 def set_class(lst, idx):
@@ -81,7 +81,11 @@ def create_table2(num_slot_per_sf=None, max_n=None, ilst=None, factor=None):
     data = [[row*num_symb_per_slot+i for i in range(num_symb_per_slot)] for row in range(total_sf*num_slot_per_sf)]
     class_data = [["" for i in range(num_symb_per_slot)] for row in range(total_sf*num_slot_per_sf)]
     total_idx = 0
-    for n in range(max_n+1):
+    if isinstance(max_n, int):
+        nlst = range(max_n + 1)
+    else:
+        nlst = max_n
+    for n in nlst:
         for i in ilst:
             idx = i + factor*n
             r, c = divmod(idx, num_symb_per_slot)
