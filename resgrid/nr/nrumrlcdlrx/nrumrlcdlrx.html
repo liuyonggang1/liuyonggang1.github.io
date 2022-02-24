@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" href="../../jscss/style.css">
+        <title>NR UM RLC DL Reception Illustration</title>
+        <style>
+.zone-output table {
+  border-style: none;
+    border: solid 1px;
+    /* border-width: 1px 1px 1px px; */
+    border-spacing: 0;
+    margin: 5px 50px 5px 50px;
+}
+
+.zone-output td {
+  border-style: none;
+    /* font-size: small;
+    border: solid 1px;
+    border-width: 1px 0 0 1px; */
+}
+
+td[ring] {
+    /* font-size: small;   */
+    font-size: x-small;
+    border: solid 1px;
+    /* border-width: 1px 0px 0px 1px; */
+    width: 3ch;
+    height: 3ch;
+    text-align: center;
+}
+
+td[out_ring] {
+    font-size: small;
+    font-weight: bold;
+    /* border: solid 1px; */
+    /* border-width: 1px 0px 0px 1px; */
+    width: 3ch;
+    height: 3ch;
+    text-align: center;
+}
+
+
+td[pos=top_row] {
+  border-width: 1px 0px 1px 1px;
+}
+
+td[pos=right_col] {
+  border-width: 1px 1px 0px 1px;
+}
+
+td[pos=bottom_row] {  
+  border-width: 1px 0px 1px 1px;
+}
+
+td[pos=left_col] {
+  border-width: 1px 1px 0px 1px;
+}
+
+td[right_border] {
+  border-right-width: 1px;
+}
+
+td[bottom_border] {
+  border-bottom-width: 1px;
+}
+
+td[area=out_of_window] {
+  background-color: white;
+}
+
+td[area=in_window_discard] {
+  background-color: yellow;
+}
+
+td[area=in_window_reassemble] {
+  background-color: lightblue;
+}
+
+/* td[discarded=no] {
+  text-decoration: none;
+  text-decoration-color: red;
+} */
+
+/* td[discarded=yes] {
+  text-decoration: line-through;
+  text-decoration-color: red;
+} */
+
+td[status=reassembled_and_delivered] {
+  color: purple;
+  border-color: black;
+  font-size: small;
+  font-weight: bold;
+}
+
+td[status=partial_received] {
+  color: black;
+}
+
+td[status=no_segments] {
+  color: black;
+}
+
+td[rcvd_sn=yes][discarded=yes] {
+  background-color: red;
+}
+
+td[rcvd_sn=yes][discarded=no] {
+  background-color: green;
+}
+
+td[out_rcvd_sn=yes] {
+  font-size: x-small;
+  font-weight: normal;
+}
+
+/* td[out_rcvd_no_missing_seg=yes] {
+  background-color: lightgreen;
+} */
+
+.span_manual_inpit {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+
+        </style>
+        <script src='../../jscss/brython.js'></script>
+        <script src='../../jscss/brython_stdlib.js'></script>        
+        </head>
+    <body onload="brython(1)">
+        <div class="zone_head_div">
+          <span><a href="../index.html">Index</a></span>
+          <span id="zone_head"></span>
+        </div>
+        <div class='zone-input' id='zone-input'></div>
+        <div class='zone-output' id='zone-output'></div>
+        <div>
+            <h3>Description</h3>
+            <ul>
+              <li>blue and yellow area are reassemebly window</li>
+              <ul>
+                <li>blue area is the segments reassemebly area</li>
+                <li>yellow area is discarding area</li>
+              </ul>
+              <li>the received SN segment is represented by two random values</li>
+              <ul>
+                <li>SN in [lower bound of reception window, RX_NEXT_HIGHEST+2]</li>
+                <ul>
+                  <li>indicated by green or red</li>
+                  <li>green represents put into buffer</li>
+                  <li>red represents discarded</li>    
+                  <ul>
+                    <li>in yellow area</li>
+                    <li>in blue area and the SN with all bytes received</li>
+                  </ul>
+                </ul>
+                <li>segement is a random value in (0, 1)</li>
+                <ul>
+                  <li>indicated by value displayed out of ring</li>
+                  <li>all bytes are received if sum(segments) >= 1</li>
+                  <li>subtitle represents the percent received. it is sum(segements)</li>
+                  <li>bold purple font represents the SN is all bytes received and delivered to upper layer</li>
+                </ul>
+              </ul>
+              <li>H: RX_Next_Highest</li>
+              <li>R: RX_Next_Reassemebly</li>
+              <li>T: RX_Timer_Trigger</li>
+              <!-- <li>R: RX_NEXT_REASSEMBLY</li> -->
+              <!-- <li>黄色表明t_reordering正在运行，所在位置是RX_REORDER</li>
+              <li>reorder可以在manual模式下触发。t_reordering是无限长的，点击reorder按钮触发t_reordering超时</li> -->
+            </ul>
+        </div>
+        <script type='text/python'>
+from browser import document, window
+stem = window.location.pathname.split('/')[-1].replace('.html', '')
+document['zone_head'] <= document.title
+exec (f"import {stem}")
+        </script>
+    </body>
+</html>

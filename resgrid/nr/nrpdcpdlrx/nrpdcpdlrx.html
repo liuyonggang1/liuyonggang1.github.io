@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" href="../../jscss/style.css">
+        <title>NR PDCP DL Reception Illustration</title>
+        <style>
+        .older {background-color:lightgrey;}
+        .old {background-color:lightgreen;}
+        .win {background-color:lightblue;}
+        /* .buf {background-color:yellow;} */
+        .future {background-color:white;}
+        .rx_reorder {background-color:yellow;}
+        /* .future {background-color:white;} */
+
+.zone-output td {
+    /* font-size: small; */
+    /* font-weight: bold; */
+    /* border: solid 1px; */
+    /* border-width: 1px 0px 0px 1px; */
+    width: 4ch;
+    height: 4ch;
+    text-align: center;
+    /* padding: 3px 0px 3px 0px; */
+}
+
+
+        </style>
+        <script src='../../jscss/brython.js'></script>
+        <script src='../../jscss/brython_stdlib.js'></script>        
+        </head>
+    <body onload="brython(1)">
+        <div class="zone_head_div">
+          <span><a href="../index.html">Index</a></span>
+          <span id="zone_head"></span>
+        </div>
+        <div class='zone-input' id='zone-input'></div>
+        <div class='zone-output' id='zone-output'></div>
+        <div>
+            <h3>Description</h3>
+            <ul>
+              <li>蓝色是接收窗口</li>
+              <li>收到的SN映射到绿色、蓝色区域，绿色是已经提交给上层的</li>
+              <li>SN是在[0, max SN]中随机产生。manual模式下可以调整</li>
+              <li>数字是SN收到的次数</li>
+              <li>D: RX_DELIV</li>
+              <li>N: RX_NEXT</li>
+              <li>黄色表明t_reordering正在运行，所在位置是RX_REORDER</li>
+              <li>reorder可以在manual模式下触发。t_reordering是无限长的，点击reorder按钮触发t_reordering超时</li>
+            </ul>
+        </div>
+        <script type='text/python'>
+from browser import document, window
+stem = window.location.pathname.split('/')[-1].replace('.html', '')
+document['zone_head'] <= document.title
+exec (f"import {stem}")
+        </script>
+    </body>
+</html>

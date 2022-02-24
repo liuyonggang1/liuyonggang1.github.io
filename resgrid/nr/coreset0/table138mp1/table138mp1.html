@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" href="../../../jscss/style.css">
+        <title>CORESET#0 38.213 table 13-8 multiplexing pattern 1</title>
+        <style>
+
+sub {
+    font-size: .6em;
+}
+
+.supsub {
+    display: inline-block;
+}
+
+.supsub sup,
+.supsub sub {
+    position: relative;
+    display: block;
+    font-size: .5em;
+    line-height: 1.2;
+}
+
+.supsub sub {
+    top: .2em;
+}
+
+
+.zone-output table {
+  /* border-style: none; */
+  /* border: solid 1px; */
+  /* border-width: 1px 1px 1px px; */
+  /* border-spacing: 0; */
+  margin: 20px 50px 20px 50px;
+}
+
+
+.zone-output td {
+    /* font-size: small; */
+    /* font-weight: bold; */
+    /* border: solid 1px; */
+    /* border-width: 1px 0px 0px 1px; */
+    /* width: 3ch; */
+    /* height: 3ch; */
+    text-align: center;
+    padding: 3px 3px 3px 3px;
+}
+
+.ssb {
+    background-color: yellow;
+}
+
+.kssb {
+    background-color: lightblue;
+}
+
+.coreset0 {
+    background-color: lightgreen;
+}
+
+        </style>
+        <script src='../../../jscss/brython.js'></script>
+        <script src='../../../jscss/brython_stdlib.js'></script>        
+        </head>
+    <body onload="brython(1)">
+        <div class="zone_head_div">
+          <span><a href="../../index.html">Index</a></span>
+          <span id="zone_head"></span>
+        </div>    
+        <div class='zone-input' id='zone-input'></div>
+        <div class='zone-output' id='zone-output'></div>
+        <script type='text/python'>
+from browser import document, window
+stem = window.location.pathname.split('/')[-1].replace('.html', '')
+document['zone_head'] <= document.title
+exec (f"import {stem}")
+        </script>
+    </body>
+</html>

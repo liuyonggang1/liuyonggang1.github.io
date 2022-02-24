@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" href="../../jscss/style.css">
+        <title>PBCH Payload 38.212 7.1</title>
+        <style>
+
+td {
+    /* font-size: small;   */
+    font-size: small;
+    /* border: solid 1px; */
+    /* border-width: 1px 0px 0px 1px; */
+    width: 4ch;
+    height: 4ch;
+    text-align: center;
+}
+
+.msg_bits {
+    background-color: lightgreen;
+}
+
+.additional_timing_bits {
+    background-color: lightyellow;
+}
+
+
+.sfn_bits {
+    background-color: yellow;
+}
+
+.hrf_bits {
+    background-color: lightblue;
+}
+
+.issb_bits {
+    background-color: lightcoral;
+}
+
+        </style>
+        <script src='../../jscss/brython.js'></script>
+        <!-- <script src='../../jscss/brython_stdlib.js'></script> -->
+        </head>
+    <body onload="brython(1)">
+        <div class="zone_head_div">
+          <span><a href="../index.html">Index</a></span>
+          <span id="zone_head"></span>
+        </div>
+        <pre>
+            PBCH Payload                        bits    MSB
+            ├─BCCH-BCH-Message                  0       
+            │ └─message                         1       0
+            │   ├─mib                           0
+            │   │ ├─systemFrameNumber           6       1,2,3,4,5,6
+            │   │ ├─subCarrierSpacingCommon     1       7
+            │   │ ├─ssb-SubcarrierOffset        4       8,9,10,11
+            │   │ ├─dmrs-TypeA-Position         1       12
+            │   │ ├─pdcch-ConfigSIB1            0
+            │   │ │ ├─controlResourceSetZero    4       13,14,15,16
+            │   │ │ └─searchSpaceZero           4       17,18,19,20
+            │   │ ├─cellBarred                  1       21
+            │   │ ├─intraFreqReselection        1       22
+            │   │ └─spare                       1       23
+            │   └─messageClassExtension         0
+            │
+            ├─A     4th LSB of SFN                      24
+            ├─A+1   3rd LSB of SFN                      25
+            ├─A+2   2nd LSB of SFN                      26
+            ├─A+3   1st LSB of SFN                      27
+            ├─A+4   half frame bit                      28
+            ├─A+5   FR1: MSB of kSSB,                   29
+            │       FR2: 6th bit of candidate SSB index
+            ├─A+6   FR1: reserved,                      30
+            │       FR2: 5th bit of candidate SSB index
+            └─A+7   FR1: reserved,                      31
+                    FR2: 4th bit of candidate SSB index
+        </pre>
+        <div class='zone-input' id='zone-input'></div>
+        <div class='zone-output' id='zone-output'></div>
+        <script type='text/python'>
+from browser import document, window
+stem = window.location.pathname.split('/')[-1].replace('.html', '')
+document['zone_head'] <= document.title
+exec (f"import {stem}")
+        </script>
+    </body>
+</html>

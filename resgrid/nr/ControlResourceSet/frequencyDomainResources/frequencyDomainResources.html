@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" href="../../../jscss/style.css">
+        <title>IE ControlReourceSet -> frequencyDomainResources</title>
+        <style>
+
+/* sub {
+    font-size: .6em;
+} */
+
+.supsub {
+    display: inline-block;
+    text-align: left;
+}
+
+.supsub sup, .supsub sub {
+    position: relative;
+    display: block;
+    font-size: .6em;
+    line-height: 1.2;
+}
+
+.supsub sub {
+    top: .2em;
+}
+
+.zone-input .word {
+    font-size: medium;
+}
+
+.zone-input .supsub sup, .zone-input .supsub sub {
+    font-size: .7em;
+    /* line-height: 1.2; */
+}
+
+
+/* .zone-output table {
+  margin: 20px 0px 20px 50px;
+} */
+
+
+.zone-output caption {
+    font-size: large;
+}
+
+.zone-output td.head-row {
+    font-size: small;
+    text-align: center;
+    padding: 2px 2px 2px 2px;
+}
+
+.zone-output td.head-col {
+    font-size: small;
+    text-align: center;
+    padding: 2px 2px 2px 2px;
+}
+
+
+/* .zone-output td {
+    font-size: small;
+    width: 3ch;
+    height: 3ch;
+    text-align: center;
+} */
+
+.cell-data {
+    width: 8ch;
+    /* height: 3ch; */
+    text-align: center;
+    padding: 2px 2px 2px 2px;
+}
+
+
+.outcarrier, .offset {
+    background-color: lightgrey;
+}
+
+.incarrier {
+    background-color: lightblue;
+}
+
+.group0 {
+    background-color: lightgreen;
+}
+
+.group1 {
+    background-color: yellow;
+}
+
+        </style>
+        <script src='../../../jscss/brython.js'></script>
+        <script src='../../../jscss/brython_stdlib.js'></script>        
+        </head>
+    <body onload="brython(1)">
+        <div class="zone_head_div">
+          <span><a href="../../index.html">Index</a></span>
+          <span id="zone_head"></span>
+        </div>    
+        <div class='zone-input' id='zone-input'></div>
+        <div class='zone-output' id='zone-output'></div>
+        <script type='text/python'>
+from browser import document, window
+stem = window.location.pathname.split('/')[-1].replace('.html', '')
+document['zone_head'] <= document.title
+exec (f"import {stem}")
+        </script>
+    </body>
+</html>

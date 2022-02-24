@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" href="../../../jscss/style.css">
+        <title>CORESET#0 38.213 table 13-13: multiplexing pattern 2 and {SS/PBCH block, PDCCH} SCS {120, 60} kHz</title>
+        <style>
+
+/* sub {
+    font-size: .6em;
+} */
+
+.supsub {
+    display: inline-block;
+    text-align: left;
+}
+
+.supsub sup, .supsub sub {
+    position: relative;
+    display: block;
+    font-size: .5em;
+    line-height: 1.2;
+}
+
+.supsub sub {
+    top: .2em;
+}
+
+.zone-output table {
+  margin: 50px 0px 50px 50px;
+}
+
+.zone-output td.head-row {
+    font-size: medium;
+    width: 10ch;
+    text-align: center;
+    padding: 3px 3px 3px 3px;
+}
+
+.zone-output td {
+    font-size: small;
+    text-align: center;
+}
+
+.sf0 {
+    background-color: lightgreen;
+}
+
+.sf1 {
+    background-color: Aquamarine;
+}
+
+.ssbslot0, .c0slot0 {
+    background-color: deepskyblue;
+}
+
+.ssbslot1, .c0slot1 {
+    background-color: lightblue;
+}
+
+
+.issb0 {
+    background-color: yellow;
+}
+
+.issb1 {
+    background-color: GreenYellow;
+}
+
+        </style>
+        <script src='../../../jscss/brython.js'></script>
+        <script src='../../../jscss/brython_stdlib.js'></script>        
+        </head>
+    <body onload="brython(1)">
+        <div class="zone_head_div">
+          <span><a href="../../index.html">Index</a></span>
+          <span id="zone_head"></span>
+        </div>    
+        <div class='zone-input' id='zone-input'></div>
+        <div class='zone-output' id='zone-output'></div>
+        <script type='text/python'>
+from browser import document, window
+stem = window.location.pathname.split('/')[-1].replace('.html', '')
+document['zone_head'] <= document.title
+exec (f"import {stem}")
+        </script>
+    </body>
+</html>

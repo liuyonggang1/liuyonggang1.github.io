@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" href="../../../jscss/style.css">
+        <title>CORESET#0 38.213 table 13-9</title>
+        <style>
+
+sub {
+    font-size: .6em;
+}
+
+.supsub {
+    display: inline-block;
+}
+
+.supsub sup,
+.supsub sub {
+    position: relative;
+    display: block;
+    font-size: .5em;
+    line-height: 1.2;
+}
+
+.supsub sub {
+    top: .2em;
+}
+
+
+.zone-output table {
+  /* border-style: none; */
+  /* border: solid 1px; */
+  /* border-width: 1px 1px 1px px; */
+  /* border-spacing: 0; */
+  margin: 20px 50px 20px 50px;
+}
+
+
+.zone-output td {
+    /* font-size: small; */
+    /* font-weight: bold; */
+    /* border: solid 1px; */
+    /* border-width: 1px 0px 0px 1px; */
+    /* width: 3ch; */
+    /* height: 3ch; */
+    text-align: center;
+    /* padding: 3px 0px 3px 0px; */
+}
+
+td.head-row {
+    font-size: small;
+    /* font-weight: bold; */
+    /* border: solid 1px; */
+    /* border-width: 1px 0px 0px 1px; */
+    /* width: 3ch; */
+    /* height: 3ch; */
+    /* text-align: center; */
+    padding: 3px 3px 3px 3px;
+}
+
+
+.ssbrb {
+    background-color: yellow;
+    padding: 3px 3px 3px 3px;
+}
+
+.ssbsc {
+    background-color: yellow;
+}
+
+.ssb75 {
+    background-color: yellow;
+    color: yellow;
+    border-color: black;
+    border-left-style: none;
+    border-right-style: solid;
+    border-right-width: 1px;
+}
+
+.kssb {
+    background-color: lightblue;
+}
+
+.coreset0rb {
+    background-color: lightgreen;
+    padding: 3px 3px 3px 3px;
+}
+
+.coreset0sc {
+    background-color: lightgreen;
+    border-left-color: lightgreen;
+}
+
+.coreset075 {
+    background-color: lightgreen;
+    color: lightgreen;
+    border-color: black;
+    border-right-color: lightgreen;
+}
+
+.h0 {
+    border-top-color: red;
+}
+
+.h1 {
+    border-bottom-color: red;
+}
+
+.o0, .o1, .o2, .o4, .o5, .o6 {
+    border-top-style: none;
+}
+
+.o7, .o6, .o5, .o3, .o2, .o1 {
+    border-bottom-style: none;
+}
+
+
+.o3 {
+    border-top-color: red;
+    border-top-width: thin;
+    border-bottom-style: none;
+}
+
+.o4 {
+    border-bottom-color: red;
+    border-bottom-width: thin;
+    border-bottom-style: none;
+}
+
+
+.nonoverlap_subcarriers_left {
+    border-left-color: lightgreen;
+}
+
+.nonoverlap_subcarriers_right {
+    border-right-style: none;
+}
+
+.blank0 {
+    border-left-style: none;
+    border-right-style: none;
+}
+
+.blank1 {
+    border-left-style: none;
+    border-right-style: none;
+}
+
+.blank2 {
+    border-left-style: none;
+    border-right-style: none;
+}
+
+.blank3 {
+    border-left-style: none;
+}
+
+.blank4, .blank5 {
+    border-left-style: none;
+    border-right-style: none;
+}
+
+.ssref {
+    background-color: red;
+}
+
+        </style>
+        <script src='../../../jscss/brython.js'></script>
+        <script src='../../../jscss/brython_stdlib.js'></script>        
+        </head>
+    <body onload="brython(1)">
+        <div class="zone_head_div">
+          <span><a href="../../index.html">Index</a></span>
+          <span id="zone_head"></span>
+        </div>    
+        <div class='zone-input' id='zone-input'></div>
+        <div class='zone-output' id='zone-output'></div>
+        <script type='text/python'>
+from browser import document, window
+stem = window.location.pathname.split('/')[-1].replace('.html', '')
+document['zone_head'] <= document.title
+exec (f"import {stem}")
+        </script>
+    </body>
+</html>
